@@ -18,6 +18,10 @@ public class DownloadBitmapTask extends
         this.viewHolder = viewHolder;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
     @Override
     // doInBackground runs in a separate thread
     // than the UI thread. Worker thread.

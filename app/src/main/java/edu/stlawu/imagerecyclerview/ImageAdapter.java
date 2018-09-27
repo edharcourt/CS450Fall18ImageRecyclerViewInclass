@@ -45,9 +45,44 @@ public class ImageAdapter extends
                imageAdapterViewHolder, int i) {
         String url = images.get(i);
 
-        DownloadBitmapTask t =
-                new DownloadBitmapTask(imageAdapterViewHolder);
-        t.execute(url);
+        // need to figure out if there is already
+        // a task downloading an image for this
+        // viewholder
+
+        if (cancelCurrentTask(
+                url,
+                imageAdapterViewHolder.imageView)) {
+            DownloadBitmapTask t =
+                    new DownloadBitmapTask(
+                            imageAdapterViewHolder);
+            AsyncDrawable asyncDrawable = new AsyncDrawable(????);
+            t.execute(url);
+        }
+
+        //DownloadBitmapTask t =
+        //        new DownloadBitmapTask(imageAdapterViewHolder);
+        //t.execute(url);
+    }
+
+    private boolean cancelCurrentTask(
+            String url,  ImageView imageView) {
+
+        // get the task for the imageview if it exists.
+        DownloadBitmapTask bitmapTask = AsyncDrawable
+                .getDownloadBitmapTaskReference(imageView);
+        if (bitmapTask != null) {
+
+            //TODO What if getURL is null?
+            String taskURL = bitmapTask.getUrl();
+            if (taskURL == null || !url.equals(taskURL)) {
+                bitmapTask.cancel(true);
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        return true;  // TODO Why?
     }
 
     @Override
