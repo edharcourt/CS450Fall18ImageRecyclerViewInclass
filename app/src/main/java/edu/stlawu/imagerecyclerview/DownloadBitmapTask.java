@@ -7,10 +7,15 @@ import android.widget.ImageView;
 public class DownloadBitmapTask extends
         AsyncTask<String, Void, Bitmap>  {
 
-    private ImageView iv;
+    // The task will fill in the views in the view holder
+    private ImageAdapter.ImageAdapterViewHolder
+            viewHolder;
 
-    public DownloadBitmapTask(ImageView iv) {
-        this.iv = iv;
+    private String url;
+
+    public DownloadBitmapTask(
+            ImageAdapter.ImageAdapterViewHolder viewHolder) {
+        this.viewHolder = viewHolder;
     }
 
     @Override
@@ -18,8 +23,11 @@ public class DownloadBitmapTask extends
     // than the UI thread. Worker thread.
     protected Bitmap doInBackground(String... url) {
         Bitmap bm = Utility.downloadBitmap(
-                url[0], iv.getWidth(), iv.getHeight()
+            url[0],
+            viewHolder.imageView.getMaxWidth(),
+            viewHolder.imageView.getMaxHeight()
         );
+        this.url = url[0];
         return bm;
     }
 
@@ -27,6 +35,7 @@ public class DownloadBitmapTask extends
     // onPostExecute always runs in the UI thread.
     protected void onPostExecute(Bitmap bitmap) {
         super.onPostExecute(bitmap);
-        iv.setImageBitmap(bitmap);
+        this.viewHolder.imageView.setImageBitmap(bitmap);
+        this.viewHolder.textView.setText(this.url);
     }
 }

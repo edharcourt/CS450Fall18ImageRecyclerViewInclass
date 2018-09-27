@@ -6,6 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 public class ImageAdapter extends
    RecyclerView.Adapter<
@@ -41,11 +45,9 @@ public class ImageAdapter extends
                imageAdapterViewHolder, int i) {
         String url = images.get(i);
 
-        
-
-
-
-
+        DownloadBitmapTask t =
+                new DownloadBitmapTask(imageAdapterViewHolder);
+        t.execute(url);
     }
 
     @Override
@@ -56,8 +58,14 @@ public class ImageAdapter extends
     class ImageAdapterViewHolder
         extends RecyclerView.ViewHolder {
 
-        public ImageAdapterViewHolder(@NonNull View itemView) {
+        ImageView imageView;
+        TextView textView;
+
+        public ImageAdapterViewHolder(
+                @NonNull View itemView) {
             super(itemView);
+            this.imageView = itemView.findViewById(R.id.rv_item_image);
+            this.textView = itemView.findViewById(R.id.rv_item_text);
         }
     }
 
