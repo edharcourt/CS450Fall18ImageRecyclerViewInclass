@@ -39,7 +39,18 @@ public class DownloadBitmapTask extends
     // onPostExecute always runs in the UI thread.
     protected void onPostExecute(Bitmap bitmap) {
         super.onPostExecute(bitmap);
-        this.viewHolder.imageView.setImageBitmap(bitmap);
-        this.viewHolder.textView.setText(this.url);
+
+        if (this.isCancelled()) { return; }
+
+        ImageView iv = viewHolder.imageView;
+        DownloadBitmapTask iv_task =
+            AsyncDrawable
+                .getDownloadBitmapTaskReference(iv);
+
+        if (this == iv_task && iv != null) {
+            this.viewHolder.imageView.setImageBitmap(bitmap);
+            this.viewHolder.textView.setText(this.url);
+        }
+
     }
 }

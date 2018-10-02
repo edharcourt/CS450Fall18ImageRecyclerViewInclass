@@ -24,8 +24,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         this.imageAdapter =
-            new ImageAdapter(ImageURLInterface
-                             .create(ImageURLInterface.GOOGLE));
+            new ImageAdapter(
+                    ImageURLInterface
+                             .create(ImageURLInterface.GOOGLE),
+                    this);
 
         recyclerView.setAdapter(this.imageAdapter);
         recyclerView.addItemDecoration(

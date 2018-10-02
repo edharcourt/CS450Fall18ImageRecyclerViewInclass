@@ -1,6 +1,9 @@
 package edu.stlawu.imagerecyclerview;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,13 +16,21 @@ import org.w3c.dom.Text;
 
 public class ImageAdapter extends
    RecyclerView.Adapter<
-     ImageAdapter.ImageAdapterViewHolder>
-{
+     ImageAdapter.ImageAdapterViewHolder> {
 
     private ImageURLInterface images;
+    private Activity act;
+    private Bitmap placeholder;
 
-    public ImageAdapter(ImageURLInterface images) {
+
+    public ImageAdapter(ImageURLInterface images,
+                        Activity act) {
         this.images = images;
+        this.act = act;
+        this.placeholder = BitmapFactory.decodeResource(
+                this.act.getResources(),
+                R.drawable.sv_chip_weaving
+        );
     }
 
     @NonNull
@@ -52,11 +63,18 @@ public class ImageAdapter extends
         if (cancelCurrentTask(
                 url,
                 imageAdapterViewHolder.imageView)) {
-            DownloadBitmapTask t =
+            DownloadBitmapTask task =
                     new DownloadBitmapTask(
                             imageAdapterViewHolder);
-            AsyncDrawable asyncDrawable = new AsyncDrawable(????);
-            t.execute(url);
+            AsyncDrawable asyncDrawable =
+                    new AsyncDrawable(
+                            this.act.getResources(),
+                            this.placeholder,
+                            task);
+            imageAdapterViewHolder
+              .imageView
+              .setImageDrawable(asyncDrawable);
+            task.execute(url);
         }
 
         //DownloadBitmapTask t =
